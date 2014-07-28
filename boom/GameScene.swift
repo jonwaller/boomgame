@@ -3,60 +3,130 @@ import UIKit
 
 class GameScene: SKScene {
     
-    let sprite = SKSpriteNode(imageNamed:"Spaceship")
-
+    let spaceshipSprite = SKSpriteNode(imageNamed:"Spaceship")
+    
+    var hasFinger0Location=false
+    var hasFinger1Location=false
+    var finger0Location=CGPoint(x:0,y:0)
+    var finger1Location=CGPoint(x:0,y:0)
+    
+    var spaceshipLocation=CGPoint(x:0,y:0)
+    
     override func didMoveToView(view: SKView) {
-
-        sprite.xScale = 0.05
-        sprite.yScale = 0.05
-        sprite.position = CGPoint(x:0,y:0);
         
-        self.addChild(sprite)
-
+        spaceshipSprite.xScale = 0.05
+        spaceshipSprite.yScale = 0.05
+        spaceshipSprite.position=spaceshipLocation
+        
+        self.addChild(spaceshipSprite)
+        
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         
-        var fingerNumber=0
-        var x0, y0:Double
-        var y1, x1:Double
-        var x, y:Double
+        hasFinger0Location=false
+        hasFinger1Location=false
         
-        x0=0;
-        y0=0;
+        var fingerCounter=0
         
         for touch:AnyObject in touches{
-                
-                if (fingerNumber==0){
-                
-                    let location = touch.locationInNode(self)
-                    x0=(Double)(location.x)
-                    y0=(Double)(location.y)
-                    let action = SKAction.moveTo(location,duration:0.5)
-                    sprite.runAction(action)
-                
-                }else if (fingerNumber==1){
-                
-                    let location = touch.locationInNode(self)
-                    x1=(Double)(location.x)
-                    y1=(Double)(location.y)
-                    
-                    x=(x1-x0)
-                    y=(y1-y0)
-                    
-                    let orientation = CGFloat(UIKit.atan(x/y))
-                    
-                    let action = SKAction.rotateToAngle(-orientation, duration: 0.1, shortestUnitArc: true)
-                    sprite.runAction(action)
-                }
-
-                fingerNumber=fingerNumber+1;
-                
+            
+            if (fingerCounter==0){
+                finger0Location = touch.locationInNode(self)
+                hasFinger0Location=true
+            }else if (fingerCounter==1){
+                finger1Location = touch.locationInNode(self)
+                hasFinger1Location=true
             }
-
+            
+            fingerCounter=fingerCounter+1
+        }
     }
-   
+    
+    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+        
+        hasFinger0Location=false
+        hasFinger1Location=false
+        
+        var fingerCounter=0
+        
+        for touch:AnyObject in touches{
+            
+            if (fingerCounter==0){
+                finger0Location = touch.locationInNode(self)
+                hasFinger0Location=true
+            }else if (fingerCounter==1){
+                finger1Location = touch.locationInNode(self)
+                hasFinger1Location=true
+            }
+            
+            fingerCounter=fingerCounter+1
+        }
+    }
+    
+    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+        
+        hasFinger0Location=false
+        hasFinger1Location=false
+        
+        var fingerCounter=0
+        
+        for touch:AnyObject in touches{
+            
+            if (fingerCounter==0){
+                finger0Location = touch.locationInNode(self)
+                hasFinger0Location=true
+            }else if (fingerCounter==1){
+                finger1Location = touch.locationInNode(self)
+                hasFinger1Location=true
+            }
+            
+            fingerCounter=fingerCounter+1
+        }
+        
+    }
+    
     override func update(currentTime: CFTimeInterval) {
-
+        
+        
+        if (!hasFinger0Location && !hasFinger1Location){
+            //No fingers - Newton's first law
+            
+        }else if (hasFinger0Location && !hasFinger1Location){
+            
+            //Move + rotate same finger
+            
+            spaceshipLocation.x+=(finger0Location.x-spaceshipLocation.x)/10
+            spaceshipLocation.y+=(finger0Location.y-spaceshipLocation.y)/10
+            
+            var xDiff=(Double)(spaceshipLocation.x-finger0Location.x)
+            var yDiff=(Double)(spaceshipLocation.y-finger0Location.y)
+            
+            let orientation = CGFloat(UIKit.atan(xDiff/yDiff))
+            
+            let action = SKAction.rotateToAngle(-orientation, duration: 0)
+            spaceshipSprite.runAction(action)
+            
+        }else if (hasFinger0Location && hasFinger1Location){
+            
+            //Move(finger0) + rotate(finger1)
+            
+            spaceshipLocation.x+=(finger0Location.x-spaceshipLocation.x)/10
+            spaceshipLocation.y+=(finger0Location.y-spaceshipLocation.y)/10
+            
+            var xDiff=(Double)(finger1Location.x-finger0Location.x)
+            var yDiff=(Double)(finger1Location.y-finger0Location.y)
+            
+            let orientation = CGFloat(UIKit.atan(xDiff/yDiff))
+            
+            let action = SKAction.rotateToAngle(-orientation, duration: 0)
+            spaceshipSprite.runAction(action)
+        }
+        
+        //spaceshipLocation.x+=spaceshipXv
+        //spaceshipLocation.y+=spaceshipYv
+        
+        spaceshipSprite.position = spaceshipLocation
+        
     }
 }
