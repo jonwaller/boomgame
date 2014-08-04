@@ -21,28 +21,7 @@ class GameScene: SKScene {
         self.addChild(spaceshipSprite)
         
     }
-    
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        
-        hasFinger0Location=false
-        hasFinger1Location=false
-        
-        var fingerCounter=0
-        
-        for touch:AnyObject in touches{
-            
-            if (fingerCounter==0){
-                finger0Location = touch.locationInNode(self)
-                hasFinger0Location=true
-            }else if (fingerCounter==1){
-                finger1Location = touch.locationInNode(self)
-                hasFinger1Location=true
-            }
-            
-            fingerCounter=fingerCounter+1
-        }
-    }
-    
+
     override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
         
         hasFinger0Location=false
@@ -63,29 +42,7 @@ class GameScene: SKScene {
             fingerCounter=fingerCounter+1
         }
     }
-    
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-        
-        hasFinger0Location=false
-        hasFinger1Location=false
-        
-        var fingerCounter=0
-        
-        for touch:AnyObject in touches{
-            
-            if (fingerCounter==0){
-                finger0Location = touch.locationInNode(self)
-                hasFinger0Location=true
-            }else if (fingerCounter==1){
-                finger1Location = touch.locationInNode(self)
-                hasFinger1Location=true
-            }
-            
-            fingerCounter=fingerCounter+1
-        }
-        
-    }
-    
+
     override func update(currentTime: CFTimeInterval) {
         
         
