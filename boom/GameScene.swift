@@ -18,6 +18,13 @@ class GameScene: SKScene {
         spaceshipSprite.position=spaceshipLocation
         
         self.addChild(spaceshipSprite)
+        
+        var timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self,
+            selector: Selector("weaponFireTick"), userInfo: nil, repeats: true)
+    }
+    
+    func weaponFireTick(){
+        
     }
     
     override func didMoveToView(view: SKView) {
