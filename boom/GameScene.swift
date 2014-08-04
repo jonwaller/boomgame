@@ -12,14 +12,16 @@ class GameScene: SKScene {
     
     var spaceshipLocation=CGPoint(x:0,y:0)
     
-    override func didMoveToView(view: SKView) {
-        
+    func initGame(){
         spaceshipSprite.xScale = 0.1
         spaceshipSprite.yScale = 0.1
         spaceshipSprite.position=spaceshipLocation
         
         self.addChild(spaceshipSprite)
-        
+    }
+    
+    override func didMoveToView(view: SKView) {
+        initGame()
     }
     
     override func touchesBegan(touches: NSSet!, withEvent event: UIEvent!) {
@@ -47,51 +49,40 @@ class GameScene: SKScene {
         }
     }
     
-    override func touchesEnded(touches: NSSet!, withEvent event: UIEvent!) {
-        //hasFinger0Location=false
-    }
-    
     override func update(currentTime: CFTimeInterval) {
         
-        
-        if (!hasFinger0Location && !hasFinger1Location){
-            //No fingers - Newton's first law
-            
-        }else if (hasFinger0Location && !hasFinger1Location){
-            
-            //Move + rotate same finger
-            
+        if (hasFinger0Location){
+
             spaceshipLocation.x+=(finger0Location.x-spaceshipLocation.x)/30
             spaceshipLocation.y+=(finger0Location.y-spaceshipLocation.y)/30
+        
+        }
+        
+        spaceshipSprite.position = spaceshipLocation
+
+        
+        if (hasFinger0Location && !hasFinger1Location){
             
             var xDiff=(Double)(finger0Location.x-spaceshipLocation.x)
             var yDiff=(Double)(finger0Location.y-spaceshipLocation.y)
             
             var orientation = CGFloat(UIKit.atan2(xDiff, yDiff))
-            //NSLog("%f",orientation)
+
             var action = SKAction.rotateToAngle(-orientation,duration:0);
             
             spaceshipSprite.runAction(action)
             
         }else if(hasFinger0Location && hasFinger1Location){
         
-            spaceshipLocation.x+=(finger0Location.x-spaceshipLocation.x)/30
-            spaceshipLocation.y+=(finger0Location.y-spaceshipLocation.y)/30
-            
             var xDiff=(Double)(finger1Location.x-spaceshipLocation.x)
             var yDiff=(Double)(finger1Location.y-spaceshipLocation.y)
             
             var orientation = CGFloat(UIKit.atan2(xDiff, yDiff))
-            //NSLog("%f",orientation)
+
             var action = SKAction.rotateToAngle(-orientation,duration:0);
             
             spaceshipSprite.runAction(action)
         }
-        
-        //spaceshipLocation.x+=spaceshipXv
-        //spaceshipLocation.y+=spaceshipYv
-        
-        spaceshipSprite.position = spaceshipLocation
         
     }
 }
