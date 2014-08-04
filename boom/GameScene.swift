@@ -56,33 +56,24 @@ class GameScene: SKScene {
             spaceshipLocation.x+=(finger0Location.x-spaceshipLocation.x)/30
             spaceshipLocation.y+=(finger0Location.y-spaceshipLocation.y)/30
         
+            var xDiff=(Double)(finger0Location.x-spaceshipLocation.x)
+            var yDiff=(Double)(finger0Location.y-spaceshipLocation.y)
+            
+            if(hasFinger1Location){
+                
+                xDiff=(Double)(finger1Location.x-spaceshipLocation.x)
+                yDiff=(Double)(finger1Location.y-spaceshipLocation.y)
+                
+            }
+            
+            var orientation = CGFloat(UIKit.atan2(xDiff, yDiff))
+            var action = SKAction.rotateToAngle(-orientation,duration:0);
+            
+            spaceshipSprite.runAction(action)
+            
         }
         
         spaceshipSprite.position = spaceshipLocation
 
-        
-        if (hasFinger0Location && !hasFinger1Location){
-            
-            var xDiff=(Double)(finger0Location.x-spaceshipLocation.x)
-            var yDiff=(Double)(finger0Location.y-spaceshipLocation.y)
-            
-            var orientation = CGFloat(UIKit.atan2(xDiff, yDiff))
-
-            var action = SKAction.rotateToAngle(-orientation,duration:0);
-            
-            spaceshipSprite.runAction(action)
-            
-        }else if(hasFinger0Location && hasFinger1Location){
-        
-            var xDiff=(Double)(finger1Location.x-spaceshipLocation.x)
-            var yDiff=(Double)(finger1Location.y-spaceshipLocation.y)
-            
-            var orientation = CGFloat(UIKit.atan2(xDiff, yDiff))
-
-            var action = SKAction.rotateToAngle(-orientation,duration:0);
-            
-            spaceshipSprite.runAction(action)
-        }
-        
     }
 }
