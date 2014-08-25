@@ -19,12 +19,30 @@ class GameScene: SKScene {
         
         self.addChild(spaceshipSprite)
         
-        var timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self,
+        var timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self,
             selector: Selector("weaponFireTick"), userInfo: nil, repeats: true)
     }
     
+    var missiles:SKSpriteNode[]=[]
+    
     func weaponFireTick(){
         
+        if hasFinger0Location {
+        
+        let orb = SKSpriteNode(imageNamed:"orb")
+        
+        orb.xScale = 0.05
+        orb.yScale = 0.05
+        orb.zRotation = spaceshipSprite.zRotation
+        orb.position=spaceshipLocation
+        
+        missiles.append(orb);
+        self.addChild(orb)
+        
+        //missiles.removeAtIndex(0)
+        
+        }
+
     }
     
     override func didMoveToView(view: SKView) {
@@ -78,9 +96,22 @@ class GameScene: SKScene {
             
             spaceshipSprite.runAction(action)
             
+            if UIKit.sqrt(pow(xDiff,2)+pow(yDiff,2))<20{
+                hasFinger0Location=false
+                hasFinger1Location=false
+            }
+            
         }
         
         spaceshipSprite.position = spaceshipLocation
-
+        
+        
+        for missile in missiles{
+            
+            var currentRotation:CDouble=CDouble(missile.zRotation)
+            
+            missile.position.x-=CGFloat(UIKit.sin(currentRotation))*20
+            missile.position.y+=CGFloat(UIKit.cos(currentRotation))*20
+        }
     }
 }
